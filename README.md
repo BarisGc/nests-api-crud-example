@@ -1,4 +1,4 @@
-# NestJs REST API tutorial for FreeCodeCamp
+# NestJs REST API Practice
 
 
 ### Run the API in development mode
