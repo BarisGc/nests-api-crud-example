@@ -1,0 +1,47 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  email String @unique
+  hash  String
+  hashedRt String?
+
+  firstName String?
+  lastName  String?
+
+  bookmarks Bookmark[]
+
+  @@map("users")
+}
+
+model Bookmark {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title       String
+  description String?
+  link        String
+
+  userId Int
+  // @relation(fields: [userId], references: [id], onDelete: Cascade) 
+  // onDelete: Cascade: the bookmark should be deleted as well if the user is deleted since it can be problematic to have a bookmark without a user as a case/logic but it is ok for database to have a bookmark without a user
+  // we did not use the technic above because we did not want to run the migrations again
+  // we used other way
+  user   User @relation(fields: [userId], references: [id])
+
+  @@map("bookmarks")
+}
